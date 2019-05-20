@@ -35,23 +35,24 @@
     <!-- Navbar Search -->
     <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
       <div class="input-group">
-       <div class="input-group-append">
-          
+        <div class="input-group-append">
+
         </div>
       </div>
     </form>
 
     <!-- Navbar -->
     <ul class="navbar-nav ml-auto ml-md-0">
-    
+
       </li>
       <li class="nav-item dropdown no-arrow">
-        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-user-circle fa-fw"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-       
-         
+
+
           <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
         </div>
       </li>
@@ -75,7 +76,7 @@
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Sensores</span></a>
       </li>
-         
+
     </ul>
 
     <div id="content-wrapper">
@@ -98,7 +99,7 @@
                 <div class="card-body-icon">
                   <i class="fas fa-fw fa-comments"></i>
                 </div>
-                <div class="mr-5">26 New Messages!</div>
+                <div id="especiales" class="mr-5"></div>
               </div>
               <a class="card-footer text-white clearfix small z-1" href="#">
                 <span class="float-left">View Details</span>
@@ -157,114 +158,271 @@
             </div>
           </div>
         </div>
+        <div>
 
+
+          <link rel="stylesheet" href="dist/simplepicker.css">
+
+          <button id="pruebaboton" class="simplepicker-btn">Seleccionar Fecha</button>
+          <div class="event-log"><br></div>
+
+          <script src="dist/simplepicker.js"></script>
+          <script>
+            var fecha = new Date();
+            var specialcount = 0;
+            let simplepicker = new SimplePicker({
+              zIndex: 10
+            });
+
+            simplepicker.open();
+
+            const $button = document.querySelector('button');
+            const $eventLog = document.querySelector('.event-log');
+            document.getElementById("pruebaboton").addEventListener('click', (e) => {
+              simplepicker.open();
+            });
+
+            // $eventLog.innerHTML += '\n\n';
+            simplepicker.on('submit', (date, readableDate) => {
+              fecha = date;
+              contadores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+              contadorest = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+
+              //----------------------------------------------------
+              fetch(proxyurl + url)
+                .then(data => { return data.json() })
+                .then(res => {
+                  datos = res;
+                  var key, prueba, count = 0;
+
+                  for (key = 0; key < datos.cars.length; key++) {
+                    console.log(key)
+                    var mio = datos.cars[key]
+                    console.log(mio.vehicle.specialn)
+                    if (mio.vehicle.specialn == "True") {
+                      console.log("suma")
+                      specialcount++
+                    }
+                    else {
+                      console.log("nosum")
+                    }
+                    var tiempo = mio.time.check_in
+                    var pruebadate = new Date(tiempo)
+                    var hora = pruebadate.getHours()
+
+
+
+                    if (fecha.getFullYear() == pruebadate.getFullYear()) {
+                      if (fecha.getMonth() == pruebadate.getMonth()) {
+                        if (fecha.getDate() == pruebadate.getDate()) {
+                          var hora = pruebadate.getHours()
+                          contadores[hora] = contadores[hora] + 1
+                          contadorest[hora] = contadorest[hora] + 1
+
+                        }
+                      }
+                    }
+
+                    initChart(contadores)
+                    initChartt(contadorest)
+                  }
+
+                })//----------------------------------------------------
+              document.getElementById("pruebadates").innerHTML = "Datos para la fecha: " + fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear();
+              $eventLog.innerHTML = "La fecha actual es: " + fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear() + '\n';
+              document.getElementById("pruebadatesd").innerHTML = "Datos para la fecha: " + fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear();
+              document.getElementById("especiales").innerHTML = "Hay " + specialcount.toString() + " vehiculos de personas con necesidades especiales"
+            });
+
+            simplepicker.on('close', (date) => {
+              $eventLog.innerHTML += 'Picker Closed' + '\n';
+            });
+          </script>
+
+        </div>
         <!-- Area Chart Example-->
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-chart-area"></i>
-            Grafica 1</div>
+            Grafica Cantidad de Paqrqueos Utilizados por Hora</div>
           <div class="card-body">
             <canvas id="myChart" width="100" height="50"></canvas>
             <script src="vendor/chart.js/Chart.min.js"></script>
             <script src="vendor/chart.js/Chart.bundle.js"></script>
             <script src="vendor/chart.js/Chart.js"></script>
             <script src="vendor/chart.js/Chart.bundle.min.js"></script>
-<script>
-  function initChart(contadores){
-    console.log("chart")
-    var ctx = document.getElementById('myChart').getContext('2d');
-  var myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['00','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'],
-        datasets: [{
-          label: 'Cantidad de dinero ganado por horas',
-             fill: false,
-             lineTension: 0.1,
-             backgroundColor: 'rgba(75,192,192,0.4)',
-             borderColor: 'rgba(75,192,192,1)',
-             borderCapStyle: 'butt',
-             borderDash: [],
-             borderDashOffset: 0.0,
-             borderJoinStyle: 'miter',
-             pointBorderColor: 'rgba(75,192,192,1)',
-             pointBackgroundColor: '#fff',
-             pointBorderWidth: 1,
-             pointHoverRadius: 5,
-             pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-             pointHoverBorderColor: 'rgba(220,220,220,1)',
-             pointHoverBorderWidth: 2,
-             pointRadius: 1,
-             pointHitRadius: 10,
-             data: contadores.map(function(x) { return x * 1; })
-           
-          }]
-      },
-      options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero: true
+            <script>
+              function initChart(contadores) {
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                    labels: ['00', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'],
+                    datasets: [{
+                      label: 'Cantidad de dinero ganado por horas',
+                      fill: false,
+                      lineTension: 0.1,
+                      backgroundColor: 'rgba(75,192,192,0.4)',
+                      borderColor: 'rgba(75,192,192,1)',
+                      borderCapStyle: 'butt',
+                      borderDash: [],
+                      borderDashOffset: 0.0,
+                      borderJoinStyle: 'miter',
+                      pointBorderColor: 'rgba(75,192,192,1)',
+                      pointBackgroundColor: '#fff',
+                      pointBorderWidth: 1,
+                      pointHoverRadius: 5,
+                      pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                      pointHoverBorderColor: 'rgba(220,220,220,1)',
+                      pointHoverBorderWidth: 2,
+                      pointRadius: 1,
+                      pointHitRadius: 10,
+                      data: contadores.map(function (x) { return x * 1; })
+
+                    }]
+                  },
+                  options: {
+                    scales: {
+                      yAxes: [{
+                        ticks: {
+                          beginAtZero: true
+                        }
+                      }]
+                    }
                   }
-              }]
-          }
-      }
-  });
+                });
 
-  }
-  const url = 'https://parking-tool-back.herokuapp.com/parking_tool/api/v1.0/actual/cars';
-  const proxyurl = "https://cors-anywhere.herokuapp.com/";
-  var contadores= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-  var datos = 0;
-  
-  fetch(proxyurl +url)
-    .then(data=>{return data.json()})
-    .then(res=>{
-      console.log(res);
-      datos = res;
-      var key,prueba,count=0;
-    console.log("blink")
-    console.log()
-     for (key = 0; key < datos.cars.length; key++){
-             console.log(key)
-             var mio = datos.cars[key]
-             var tiempo = mio.time.check_in
-             var pruebadate = new Date(tiempo)
-             var hora = pruebadate.getHours()
-             contadores[hora]=contadores[hora]+1
-             console.log(contadores)
-             initChart(contadores)
-            //console.log(contadores.map(function(x) { return x * costo; }))
-     }
-   
-  //  console.log("llegue")
-  })
+              }
+              const url = 'https://parking-tool-back.herokuapp.com/parking_tool/api/v1.0/actual/cars';
+              const proxyurl = "https://cors-anywhere.herokuapp.com/";
+              var contadores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+              var datos = 0;
 
-</script>
+              fetch(proxyurl + url)
+                .then(data => { return data.json() })
+                .then(res => {
+                  datos = res;
+                  var key, prueba, count = 0;
+                  for (key = 0; key < datos.cars.length; key++) {
+                    console.log(key)
+                    var mio = datos.cars[key]
+                    var tiempo = mio.time.check_in
+                    var pruebadate = new Date(tiempo)
+                    var hora = pruebadate.getHours()
+
+                    if (fecha.getFullYear() == pruebadate.getFullYear()) {
+                      if (fecha.getMonth() == pruebadate.getMonth()) {
+                        if (fecha.getDate() == pruebadate.getDate()) {
+                          var hora = pruebadate.getHours()
+                          contadores[hora] = contadores[hora] + 1
+                        }
+                      }
+                    }
+
+                    initChart(contadores)
+                  }
+
+                })
+
+            </script>
           </div>
-          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+          <div id="pruebadates" class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
         </div>
-
         <!-- DataTables Example -->
         <div class="card mb-3">
-            <div class="card-header">
-                <i class="fas fa-chart-area"></i>
-                Grafica 2</div>
-          
-            
-              
-            </div>
+          <div class="card-header">
+            <i class="fas fa-chart-area"></i>
+            Grafica Cantidad de Dinero Ganado por Horas</div>
+          <div class="card-body">
+
+            <canvas id="myChartt" width="100" height="50"></canvas>
+            <script src="vendor/chart.js/Chart.min.js"></script>
+            <script src="vendor/chart.js/Chart.bundle.js"></script>
+            <script src="vendor/chart.js/Chart.js"></script>
+            <script src="vendor/chart.js/Chart.bundle.min.js"></script>
+            <script>
+              function initChartt(contadores) {
+                var ctx = document.getElementById('myChartt').getContext('2d');
+                var myChartt = new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                    labels: ['00', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'],
+                    datasets: [{
+                      label: 'Cantidad de dinero ganado por horas',
+                      fill: false,
+                      lineTension: 0.1,
+                      backgroundColor: 'rgba(75,192,192,0.4)',
+                      borderColor: 'rgba(75,192,192,1)',
+                      borderCapStyle: 'butt',
+                      borderDash: [],
+                      borderDashOffset: 0.0,
+                      borderJoinStyle: 'miter',
+                      pointBorderColor: 'rgba(75,192,192,1)',
+                      pointBackgroundColor: '#fff',
+                      pointBorderWidth: 1,
+                      pointHoverRadius: 5,
+                      pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                      pointHoverBorderColor: 'rgba(220,220,220,1)',
+                      pointHoverBorderWidth: 2,
+                      pointRadius: 1,
+                      pointHitRadius: 10,
+                      data: contadorest.map(function (x) { return x * 5; })
+
+                    }]
+                  },
+                  options: {
+                    scales: {
+                      yAxes: [{
+                        ticks: {
+                          beginAtZero: true
+                        }
+                      }]
+                    }
+                  }
+                });
+
+              }
+
+              var contadorest = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+              var datost = 0;
+
+              fetch(proxyurl + url)
+                .then(data => { return data.json() })
+                .then(res => {
+                  datost = res;
+                  var key, prueba, count = 0;
+
+                  for (key = 0; key < datost.cars.length; key++) {
+                    var mio = datost.cars[key]
+                    var tiempo = mio.time.check_in
+                    var pruebadate = new Date(tiempo)
+                    var hora = pruebadate.getHours()
+                    if (fecha.getFullYear() == pruebadate.getFullYear()) {
+                      if (fecha.getMonth() == pruebadate.getMonth()) {
+                        if (fecha.getDate() == pruebadate.getDate()) {
+                          var hora = pruebadate.getHours()
+                          contadorest[hora] = contadorest[hora] + 1
+                        }
+                      }
+                    }
+                    initChartt(contadorest)
+                  }
+                })
+            </script>
           </div>
-          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+          <div id="pruebadatesd" class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
         </div>
-
       </div>
-      <!-- /.container-fluid -->
-
-  
-
     </div>
-    <!-- /.content-wrapper -->
+
+  </div>
+  <!-- /.container-fluid -->
+
+
+
+  </div>
+  <!-- /.content-wrapper -->
 
   </div>
   <!-- /#wrapper -->
@@ -275,7 +433,8 @@
   </a>
 
   <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
