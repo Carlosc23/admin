@@ -29,43 +29,36 @@
         <script type="text/javascript">
           function Redirect(usuario, contra) {
             const proxyurl = "https://cors-anywhere.herokuapp.com/";
-
             var Valido = false;
-
             const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
             if (emailRex.test(usuario)) {
-              console.log("Usuario valido");
+              console.log("." + usuario.toString() + ".");
+              console.log("." + contra.toString() + ".");
+              var data = { email: usuario.toString(), password: contra.toString() }
+              var url = 'https://parking-tool-back.herokuapp.com/parking_tool/api/v1.0/Login';
+
+              fetch(proxyurl + url, {
+                method: 'POST', // or 'PUT'
+                body: JSON.stringify(data), // data can be `string` or {object}!
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              }).then(res => res.text())
+                .then(data => {
+
+                  console.log(data)
+
+                  if (data == "Ok") {
+                    window.location.href = "http://localhost:3000/";
+
+                  } else {
+                    alert("Usuario o contraseña incorrecto")
+                  }
+
+                })
             } else {
-              console.log("Usuario invalido")
+              alert("Usuario  incorrecto")
             }
-
-            console.log("." + usuario.toString() + ".");
-            console.log("." + contra.toString() + ".");
-            var data = { email: usuario.toString(), password: contra.toString() }
-            var url = 'https://parking-tool-back.herokuapp.com/parking_tool/api/v1.0/Login';
-
-            fetch(proxyurl + url, {
-              method: 'POST', // or 'PUT'
-              body: JSON.stringify(data), // data can be `string` or {object}!
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            }).then(res => {
-              console.log(res)
-            })
-
-
-            if (Valido) {
-              window.location.href = "http://localhost:3000/";
-
-            } else {
-
-
-            }
-
-
-
           }
 
         </script>
