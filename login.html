@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin - Login</title>
+  <title>ALP Admin - Login</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -21,9 +21,18 @@
 
 <body class="bg-dark">
 
+    <div class="container" >
+        <div class="card card-login mx-auto ">
+            <div class="card-body">
+    <img class="d-block small" src="logo.png" alt="Logo" float="left" width="80%" />
+    </div>
+    </div>  
+    </div>
+    
   <div class="container">
     <div class="card card-login mx-auto mt-5">
-      <div class="card-header">Login</div>
+      <div class="card-header">Login></div>
+      
       <div class="card-body">
 
         <script type="text/javascript">
@@ -50,6 +59,9 @@
 
                   if (data == "Ok") {
                     window.location.href = "http://localhost:3000/";
+                    Alert.success('Bienvenido', {
+              position: 'bottom-left'
+            });
 
                   } else {
                     alert("Usuario o contraseña incorrecto")
