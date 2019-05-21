@@ -25,10 +25,55 @@
     <div class="card card-login mx-auto mt-5">
       <div class="card-header">Login</div>
       <div class="card-body">
+
+        <script type="text/javascript">
+          function Redirect(usuario, contra) {
+            const proxyurl = "https://cors-anywhere.herokuapp.com/";
+
+            var Valido = false;
+
+            const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+            if (emailRex.test(usuario)) {
+              console.log("Usuario valido");
+            } else {
+              console.log("Usuario invalido")
+            }
+
+            console.log("." + usuario.toString() + ".");
+            console.log("." + contra.toString() + ".");
+            var data = { email: usuario.toString(), password: contra.toString() }
+            var url = 'https://parking-tool-back.herokuapp.com/parking_tool/api/v1.0/Login';
+
+            fetch(proxyurl + url, {
+              method: 'POST', // or 'PUT'
+              body: JSON.stringify(data), // data can be `string` or {object}!
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }).then(res => {
+              console.log(res)
+            })
+
+
+            if (Valido) {
+              window.location.href = "http://localhost:3000/";
+
+            } else {
+
+
+            }
+
+
+
+          }
+
+        </script>
         <form>
           <div class="form-group">
             <div class="form-label-group">
-              <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
+              <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="required"
+                autofocus="autofocus">
               <label for="inputEmail">Email address</label>
             </div>
           </div>
@@ -46,7 +91,10 @@
               </label>
             </div>
           </div>
-          <a class="btn btn-primary btn-block" href="index.html">Login</a>
+          <button class="btn btn-primary btn-block" id="btnlogin"
+            onclick="Redirect(document.getElementById('inputEmail').value,document.getElementById('inputPassword').value);return false;">Login</button>
+
+
         </form>
         <div class="text-center">
           <a class="d-block small mt-3" href="register.html">Register an Account</a>
