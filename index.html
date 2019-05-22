@@ -27,12 +27,12 @@
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
 
-   
-              <img src="logo.png" alt="Logo"  width="10%"  />
 
-       
-        
-    <a class="navbar-brand mr-1" href="index.html">     ADMIN</a>
+    <img class="IMAGENINDEX" src="logo.png" alt="Logo" width="10%" />
+
+
+
+    <a class="navbar-brand mr-1" href="index.html"> </a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
@@ -95,7 +95,7 @@
             <a href="#">Dashboard</a>
           </li>
           <li class="breadcrumb-item active">Overview</li>
-        </ol> 
+        </ol>
 
         <!-- Icon Cards-->
         <div class="row">
@@ -107,7 +107,7 @@
                 </div>
                 <div id="especiales" class="mr-5"></div>
               </div>
-           
+
             </div>
           </div>
           <div class="col-xl-3 col-sm-6 mb-3">
@@ -164,7 +164,7 @@
 
           <link rel="stylesheet" href="dist/simplepicker.css">
 
-          <button id="pruebaboton" class="simplepicker-btn" >Seleccionar Fecha</button>
+          <button id="pruebaboton" class="simplepicker-btn">Seleccionar Fecha</button>
           <div class="event-log"><br></br></div>
 
           <script src="dist/simplepicker.js"></script>
@@ -186,6 +186,7 @@
             // $eventLog.innerHTML += '\n\n';
             simplepicker.on('submit', (date, readableDate) => {
               fecha = date;
+              specialcount=0;
               contadores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
               contadorest = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -200,14 +201,7 @@
                   for (key = 0; key < datos.cars.length; key++) {
                     console.log(key)
                     var mio = datos.cars[key]
-                    console.log(mio.vehicle.specialn)
-                    if (mio.vehicle.specialn == "True") {
-                      console.log("suma")
-                      specialcount++
-                    }
-                    else {
-                      console.log("nosum")
-                    }
+
                     var tiempo = mio.time.check_in
                     var pruebadate = new Date(tiempo)
                     var hora = pruebadate.getHours()
@@ -220,7 +214,15 @@
                           var hora = pruebadate.getHours()
                           contadores[hora] = contadores[hora] + 1
                           contadorest[hora] = contadorest[hora] + 1
+                          console.log(mio.vehicle.specialn) 
 
+                          if (mio.vehicle.specialn == "True") {
+                            console.log("suma")
+                            specialcount++
+                          }
+                          else {
+                            console.log("nosum")
+                          }
                         }
                       }
                     }
