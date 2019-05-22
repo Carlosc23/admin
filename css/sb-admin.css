@@ -10897,20 +10897,6 @@ footer.sticky-footer .copyright {
   font-size: 0.8rem;
 }
 
-
-.IMAGENLOGO{
-
-  margin-left: 10%;
-  
-}
-
-.IMAGENINDEX{
-
-  border-radius: 20%;
- 
-}
-
-
 @media (min-width: 768px) {
   footer.sticky-footer {
     width: calc(100% - 225px);
@@ -10925,4 +10911,34 @@ body.sidebar-toggled footer.sticky-footer {
   body.sidebar-toggled footer.sticky-footer {
     width: calc(100% - 90px);
   }
+}
+.square {
+  height: 1300px;
+  width: 1000px;
+  background-color: #555;
+  margin-left: 100px;
+} 
+
+.site{  
+  display:grid;
+  margin: 30px;
+  grid-template-columns: 100px 100px 100px 100px;
+  grid-template-rows: 150px 150px 150px 150px; 
+  grid-column-gap: 10px;
+  grid-row-gap: 15px;
+
+}
+.site > *{
+  padding:30px; color:#fff; font-size:20px; 
+  /*background:#cc0000;*/
+  background:#807D7D;
+}
+
+.side{
+  margin-top: -67.5%;
+  margin-left: 50%
+}
+
+.spark{
+  margin-top: -20%;
 }
